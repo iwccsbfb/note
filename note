@@ -1,0 +1,23 @@
+dev: 52.6.134.152
+QA: 52.4.9.178
+UAT: 184.72.77.117
+
+
+docker-machine create \
+--driver amazonec2 \
+--amazonec2-access-key $AMAZON_ACCESS_KEY \
+--amazonec2-secret-key $AMAZON_SECRET_KEY \
+--amazonec2-instance-type r3.xlarge \
+--amazonec2-root-size 40 \
+--amazonec2-tags devuser,$(whoami) \
+--amazonec2-vpc-id vpc-83fde0e6 \
+--amazonec2-subnet-id subnet-c216529b \
+--amazonec2-region us-east-1 \
+--amazonec2-zone a \
+ec2box-arthur3
+
+eval $(docker-machine env ec2box-arthur2)
+docker-machine ssh ec2box-arthur2
+
+
+

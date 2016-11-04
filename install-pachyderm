@@ -1,0 +1,69 @@
+kubectl install steps:
+```
+wget https://github.com/kubernetes/kubernetes/releases/download/v1.4.0/kubernetes.tar.gz
+tar -xvzf kubernetes.tar.gz kubernetes/
+sudo cp kubernetes/platforms/linux/amd64/kubectl /usr/local/bin/kubectl
+sudo chmod +x /usr/local/bin/kubectl
+```
+or can do
+```wget https://storage.googleapis.com/kubernetes-release/release/v1.4.0/bin/linux/amd64/kubectl
+chmod +x kubectl
+mv kubectl /usr/local/bin/
+```
+Either way, make sure you're downloading version 1.2.2 (latest version supported by pachyderm).
+Reference: http://kubernetes.io/docs/user-guide/prereqs/
+
+
+
+Install kubernates:
+### Pachyderm Repo
+```git clone git@github.com:pachyderm/pachyderm.git
+```
+### Port Forwarding
+```ssh <Username>@<HOST> -fTNL 8080:localhost:8080 -L 30650:localhost:30650
+```
+### Launch Pachyderm
+```cd ./pachyderm
+make launch-kube
+make launch
+
+# install pachctl
+curl -o /tmp/pachctl.deb -L https://pachyderm.io/pachctl.deb && sudo dpkg -i /tmp/pachctl.deb
+
+### Install pachyderm with go 
+Install go: https://www.digitalocean.com/community/tutorials/how-to-install-go-1-6-on-ubuntu-14-04
+```
+sudo curl -O https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
+sudo tar -xvf go1.6.linux-amd64.tar.gz
+sudo mv go /usr/local
+
+```
+Add to `~./profile`
+```export PATH=$PATH:/usr/local/go/bin
+```
+Create a `GOPATH`. Can be anything you want, just a place for go projects to live
+Build pachyderm
+```go get github.com/pachyderm/pachyderm
+cd $GOPATH/src/github.com/pachyderm/pachyderm
+make install
+make docker-build
+make clean-launch
+make launch-dev
+```
+
+
+fix mounted drive not shared bug:
+In /etc/systemd/system/docker.service, remove line:
+  MountFlags=slave
+
+Then run:
+```
+sudo systemctl stop docker
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+
+
+
+

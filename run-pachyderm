@@ -1,0 +1,4 @@
+pachctl create-repo / start-commit / put-file repo branch filename / finish-commit / list-repo / list-file repo branch / get-file repo branch name / 
+create-pipeline -f *.json 
+list-repo / list-commit / get-file repo branch file / list-file repo branch file / inspect-pipeline pip
+
