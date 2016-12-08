@@ -1,3 +1,13 @@
+launch pachyderm:
+cd $GOPATH/src/github.com/pachyderm/pachyderm
+sudo make launch-kube
+make clean-launch
+sudo make launch-dev
+
+
+
+
+
 kubectl install steps:
 ```
 wget https://github.com/kubernetes/kubernetes/releases/download/v1.4.0/kubernetes.tar.gz
@@ -65,5 +75,19 @@ sudo systemctl restart docker
 
 
 
+mounting ~/pfs into pachyderm:
+  mkdir ~/pfs
+  pachctl mount ~/pfs &
 
+first branch must be named master. 
 
+# unmount orphaned pods
+for i in $(cat /proc/mounts | grep kubelet | awk '{print $2}'); do sudo umount --force --lazy $i; done;
+
+about docker:
+  docker rm $(docker ps -a -q -f status=exited)
+  docker-machine regenerate-certs ec2box-arthur7
+  eval $(docker-machine env ec2box-arthur7)
+
+docker inspect-pipeline appender
+pachctl get-logs job-id

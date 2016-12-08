@@ -1,6 +1,7 @@
 dev: 52.6.134.152
 QA: 52.4.9.178
 UAT: 184.72.77.117
+ssh ec2-user@ip
 
 
 docker-machine create \
@@ -20,4 +21,4 @@ eval $(docker-machine env ec2box-arthur2)
 docker-machine ssh ec2box-arthur2
 
 
-
+printer ip: 172.18.3.6
