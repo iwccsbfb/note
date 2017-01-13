@@ -1,9 +1,46 @@
 launch pachyderm:
-cd $GOPATH/src/github.com/pachyderm/pachyderm
-sudo make launch-kube
-make clean-launch
-sudo make launch-dev
+  cd $GOPATH/src/github.com/pachyderm/pachyderm
+  sudo make launch-kube
+#make install
+#make docker-build
+  make clean-launch
+  make launch-dev
+# sudo make launch-dev
 
+
+mounting and unmounting:
+  pachctl mount ~/pfs &
+  fusermount -uz ~/pfs
+
+fix mounted drive not shared bug:
+In /etc/systemd/system/docker.service, remove line:
+  MountFlags=slave
+
+Then run:
+```
+sudo systemctl stop docker
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+
+
+
+Pachyderm dev cluster config:
+	aws configure
+	 -- input AWS_ACCESS_KEY and AWS_SECRET_KEY
+	aws s3 cp s3://trukubernetes-dev/certificates/ca.pem ca.pem
+	kubectl config set-cluster kubernetes-dev \
+	  --certificate-authority=ca.pem \
+	  --embed-certs=true \
+	  --server=https://XX.XX.XX.XX:6443
+	kubectl config set-credentials arthur --token XXXXX
+	kubectl config delete-context default-context
+	kubectl config set-context dev-context \
+	  --cluster=kubernetes-dev \
+	  --user=arthur
+	kubectl config use-context dev-context
+	pachctl port-forward &
 
 
 
@@ -37,6 +74,7 @@ Install kubernates:
 make launch-kube
 make launch
 
+
 # install pachctl
 curl -o /tmp/pachctl.deb -L https://pachyderm.io/pachctl.deb && sudo dpkg -i /tmp/pachctl.deb
 
@@ -59,18 +97,6 @@ make install
 make docker-build
 make clean-launch
 make launch-dev
-```
-
-
-fix mounted drive not shared bug:
-In /etc/systemd/system/docker.service, remove line:
-  MountFlags=slave
-
-Then run:
-```
-sudo systemctl stop docker
-sudo systemctl daemon-reload
-sudo systemctl restart docker
 ```
 
 
